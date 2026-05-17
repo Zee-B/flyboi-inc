@@ -1,0 +1,1360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Flyboy I.N.C — Official</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --black: #080808;
+    --white: #f5f2ec;
+    --gold: #c9a84c;
+    --gold-light: #e8c97a;
+    --gold-dim: #7a6328;
+    --charcoal: #111111;
+    --mid: #1a1a1a;
+    --border: rgba(201,168,76,0.18);
+    --text-muted: #6b6452;
+    --ff-display: 'Bebas Neue', sans-serif;
+    --ff-serif: 'Cormorant Garamond', serif;
+    --ff-body: 'DM Sans', sans-serif;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: var(--ff-body);
+    font-weight: 300;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* CUSTOM CURSOR */
+  .cursor {
+    position: fixed;
+    width: 8px; height: 8px;
+    background: var(--gold);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: transform 0.1s ease;
+  }
+  .cursor-ring {
+    position: fixed;
+    width: 32px; height: 32px;
+    border: 1px solid rgba(201,168,76,0.5);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9998;
+    transform: translate(-50%, -50%);
+    transition: transform 0.12s ease, width 0.2s ease, height 0.2s ease, opacity 0.2s ease;
+  }
+  body:hover .cursor-ring { opacity: 1; }
+  a:hover ~ .cursor-ring, button:hover ~ .cursor-ring { width: 48px; height: 48px; }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 2px; }
+  ::-webkit-scrollbar-track { background: var(--black); }
+  ::-webkit-scrollbar-thumb { background: var(--gold-dim); }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.6rem 4rem;
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.4s, background 0.4s, padding 0.4s;
+  }
+  nav.scrolled {
+    background: rgba(8,8,8,0.96);
+    border-color: var(--border);
+    padding: 1rem 4rem;
+    backdrop-filter: blur(12px);
+  }
+  .nav-logo {
+    font-family: var(--ff-display);
+    font-size: 1.5rem;
+    letter-spacing: 0.12em;
+    color: var(--white);
+    text-decoration: none;
+    display: flex; align-items: center; gap: 0.6rem;
+  }
+  .nav-logo span { color: var(--gold); }
+  .nav-links { display: flex; gap: 2.4rem; list-style: none; }
+  .nav-links a {
+    font-family: var(--ff-body);
+    font-size: 0.72rem;
+    font-weight: 400;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color 0.3s;
+    position: relative;
+  }
+  .nav-links a::after {
+    content: '';
+    position: absolute; bottom: -4px; left: 0;
+    width: 0; height: 1px;
+    background: var(--gold);
+    transition: width 0.3s ease;
+  }
+  .nav-links a:hover { color: var(--white); }
+  .nav-links a:hover::after { width: 100%; }
+  .nav-cta {
+    font-family: var(--ff-body);
+    font-size: 0.72rem;
+    font-weight: 400;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    border: 1px solid var(--gold-dim);
+    padding: 0.55rem 1.4rem;
+    text-decoration: none;
+    transition: background 0.3s, color 0.3s;
+  }
+  .nav-cta:hover { background: var(--gold); color: var(--black); }
+
+  /* HERO */
+  #hero {
+    height: 100vh; min-height: 700px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-left {
+    display: flex; flex-direction: column;
+    justify-content: flex-end;
+    padding: 8rem 3rem 6rem 4rem;
+    position: relative; z-index: 2;
+  }
+  .hero-eyebrow {
+    font-family: var(--ff-body);
+    font-size: 0.68rem;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1.6rem;
+    display: flex; align-items: center; gap: 1rem;
+  }
+  .hero-eyebrow::before { content: ''; display: block; width: 32px; height: 1px; background: var(--gold); }
+  .hero-title {
+    font-family: var(--ff-display);
+    font-size: clamp(5rem, 9vw, 9rem);
+    line-height: 0.92;
+    letter-spacing: 0.04em;
+    color: var(--white);
+    margin-bottom: 2rem;
+  }
+  .hero-title em {
+    font-style: normal;
+    color: var(--gold);
+    display: block;
+  }
+  .hero-sub {
+    font-family: var(--ff-serif);
+    font-size: 1.05rem;
+    font-style: italic;
+    color: var(--text-muted);
+    line-height: 1.8;
+    max-width: 340px;
+    margin-bottom: 3rem;
+  }
+  .hero-actions { display: flex; gap: 1.2rem; align-items: center; }
+  .btn-primary {
+    display: inline-block;
+    font-family: var(--ff-body);
+    font-size: 0.72rem;
+    font-weight: 400;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--black);
+    background: var(--gold);
+    padding: 1rem 2.2rem;
+    transition: background 0.3s, transform 0.2s;
+  }
+  .btn-primary:hover { background: var(--gold-light); transform: translateY(-1px); }
+  .btn-ghost {
+    display: inline-block;
+    font-family: var(--ff-body);
+    font-size: 0.72rem;
+    font-weight: 400;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--text-muted);
+    transition: color 0.3s;
+    display: flex; align-items: center; gap: 0.5rem;
+  }
+  .btn-ghost:hover { color: var(--white); }
+  .btn-ghost svg { transition: transform 0.3s; }
+  .btn-ghost:hover svg { transform: translateX(4px); }
+
+  .hero-right {
+    position: relative; overflow: hidden;
+  }
+  .hero-img-wrap {
+    position: absolute; inset: 0;
+    background: linear-gradient(135deg, #1a1612 0%, #0d0b08 60%, #080808 100%);
+    overflow: hidden;
+  }
+  .hero-img-wrap::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(201,168,76,0.015) 2px,
+      rgba(201,168,76,0.015) 4px
+    );
+    z-index: 1;
+  }
+  .hero-graphic {
+    position: absolute;
+    bottom: 0; right: 0;
+    width: 85%;
+    height: 100%;
+    display: flex; align-items: flex-end; justify-content: center;
+    z-index: 2;
+  }
+  .hero-fbi-text {
+    font-family: var(--ff-display);
+    font-size: clamp(10rem, 18vw, 22rem);
+    line-height: 1;
+    color: rgba(201,168,76,0.06);
+    position: absolute;
+    bottom: -2rem; right: -2rem;
+    letter-spacing: -0.02em;
+    pointer-events: none;
+    z-index: 1;
+  }
+  .hero-ornament {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 280px; height: 280px;
+    border: 1px solid rgba(201,168,76,0.12);
+    border-radius: 50%;
+    z-index: 2;
+    animation: spin-slow 30s linear infinite;
+  }
+  .hero-ornament::before {
+    content: '';
+    position: absolute; inset: 20px;
+    border: 1px solid rgba(201,168,76,0.08);
+    border-radius: 50%;
+  }
+  .hero-ornament::after {
+    content: 'FLYBOY I.N.C · EST. 2017 · LAGOS, NIGERIA · ';
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: var(--ff-body);
+    font-size: 0.55rem;
+    letter-spacing: 0.25em;
+    color: var(--gold-dim);
+    white-space: nowrap;
+    width: 200px;
+    text-align: center;
+  }
+  @keyframes spin-slow { to { transform: translate(-50%, -50%) rotate(360deg); } }
+
+  .hero-divider {
+    position: absolute; top: 0; bottom: 0; left: 50%;
+    width: 1px;
+    background: var(--border);
+    z-index: 3;
+  }
+
+  .hero-scroll {
+    position: absolute;
+    bottom: 2.5rem; left: 4rem;
+    display: flex; align-items: center; gap: 1rem;
+    font-size: 0.62rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    z-index: 10;
+  }
+  .scroll-line {
+    width: 40px; height: 1px;
+    background: var(--gold-dim);
+    position: relative;
+    overflow: hidden;
+  }
+  .scroll-line::after {
+    content: '';
+    position: absolute; top: 0; left: -100%;
+    width: 100%; height: 100%;
+    background: var(--gold);
+    animation: scroll-anim 2s ease infinite;
+  }
+  @keyframes scroll-anim { to { left: 100%; } }
+
+  .hero-counter {
+    position: absolute;
+    right: 3rem; bottom: 2.5rem;
+    text-align: right;
+    z-index: 10;
+  }
+  .hero-counter .num {
+    font-family: var(--ff-display);
+    font-size: 3rem;
+    color: rgba(201,168,76,0.2);
+    line-height: 1;
+  }
+  .hero-counter .label {
+    font-size: 0.62rem;
+    letter-spacing: 0.2em;
+    color: var(--text-muted);
+    text-transform: uppercase;
+  }
+
+  /* TICKER */
+  .ticker {
+    background: var(--gold);
+    padding: 0.7rem 0;
+    overflow: hidden;
+    position: relative;
+  }
+  .ticker-track {
+    display: flex;
+    white-space: nowrap;
+    animation: ticker 25s linear infinite;
+  }
+  .ticker-item {
+    font-family: var(--ff-display);
+    font-size: 0.9rem;
+    letter-spacing: 0.15em;
+    color: var(--black);
+    padding: 0 3rem;
+    display: flex; align-items: center; gap: 1.5rem;
+  }
+  .ticker-dot { width: 4px; height: 4px; background: var(--black); border-radius: 50%; opacity: 0.4; }
+  @keyframes ticker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+  /* SECTION BASE */
+  section { position: relative; }
+  .section-label {
+    font-family: var(--ff-body);
+    font-size: 0.62rem;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1rem;
+    display: flex; align-items: center; gap: 1rem;
+  }
+  .section-label::before { content: ''; display: block; width: 24px; height: 1px; background: var(--gold); }
+  .section-title {
+    font-family: var(--ff-display);
+    font-size: clamp(3rem, 5vw, 5.5rem);
+    line-height: 0.95;
+    letter-spacing: 0.04em;
+    color: var(--white);
+    margin-bottom: 1.5rem;
+  }
+
+  /* ABOUT */
+  #about {
+    padding: 8rem 4rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6rem;
+    align-items: center;
+    border-bottom: 1px solid var(--border);
+  }
+  .about-left { position: relative; }
+  .about-img-frame {
+    aspect-ratio: 3/4;
+    background: var(--mid);
+    position: relative;
+    overflow: hidden;
+  }
+  .about-img-frame::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(180deg, transparent 50%, rgba(8,8,8,0.9) 100%);
+    z-index: 1;
+  }
+  .about-img-inner {
+    width: 100%; height: 100%;
+    background: 
+      repeating-linear-gradient(45deg, transparent, transparent 30px, rgba(201,168,76,0.02) 30px, rgba(201,168,76,0.02) 31px),
+      linear-gradient(135deg, #1a1612 0%, #0d0b08 100%);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .about-monogram {
+    font-family: var(--ff-display);
+    font-size: 8rem;
+    color: rgba(201,168,76,0.15);
+    letter-spacing: 0.05em;
+  }
+  .about-frame-deco {
+    position: absolute;
+    top: -1rem; right: -1rem;
+    width: 60%; height: 60%;
+    border-top: 1px solid var(--gold-dim);
+    border-right: 1px solid var(--gold-dim);
+    pointer-events: none;
+  }
+  .about-frame-deco2 {
+    position: absolute;
+    bottom: -1rem; left: -1rem;
+    width: 40%; height: 40%;
+    border-bottom: 1px solid var(--gold-dim);
+    border-left: 1px solid var(--gold-dim);
+    pointer-events: none;
+  }
+  .about-year-badge {
+    position: absolute;
+    bottom: 1.5rem; left: 1.5rem;
+    z-index: 2;
+    background: var(--gold);
+    padding: 0.8rem 1.2rem;
+  }
+  .about-year-badge .yr { font-family: var(--ff-display); font-size: 1.8rem; color: var(--black); line-height: 1; }
+  .about-year-badge .yr-label { font-size: 0.6rem; letter-spacing: 0.2em; color: var(--black); text-transform: uppercase; }
+
+  .about-right {}
+  .about-text {
+    font-family: var(--ff-serif);
+    font-size: 1.15rem;
+    font-weight: 300;
+    line-height: 1.9;
+    color: rgba(245,242,236,0.7);
+    margin-bottom: 2rem;
+  }
+  .about-text strong { color: var(--white); font-weight: 400; }
+  .about-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--border);
+    margin-top: 3rem;
+  }
+  .stat-item {
+    background: var(--black);
+    padding: 1.5rem;
+    text-align: center;
+  }
+  .stat-num {
+    font-family: var(--ff-display);
+    font-size: 2.5rem;
+    color: var(--gold);
+    line-height: 1;
+    margin-bottom: 0.4rem;
+  }
+  .stat-label {
+    font-size: 0.62rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  /* ARTISTS */
+  #artists {
+    padding: 8rem 4rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .artists-header {
+    display: flex; justify-content: space-between; align-items: flex-end;
+    margin-bottom: 4rem;
+  }
+  .artists-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+  .artist-card {
+    position: relative;
+    aspect-ratio: 3/4;
+    overflow: hidden;
+    cursor: none;
+    group: true;
+  }
+  .artist-bg {
+    position: absolute; inset: 0;
+    transition: transform 0.6s ease;
+  }
+  .artist-card:hover .artist-bg { transform: scale(1.06); }
+  .artist-bg-kizz { background: linear-gradient(145deg, #1a1208, #0d0b08, #080808); }
+  .artist-bg-demmie { background: linear-gradient(145deg, #0d0d1a, #080810, #080808); }
+  .artist-bg-pryme { background: linear-gradient(145deg, #0d1208, #080d08, #080808); }
+  .artist-pattern {
+    position: absolute; inset: 0; z-index: 1;
+    background:
+      repeating-linear-gradient(45deg, transparent, transparent 20px, rgba(201,168,76,0.025) 20px, rgba(201,168,76,0.025) 21px);
+  }
+  .artist-monogram {
+    position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%, -50%) translateY(-20px);
+    font-family: var(--ff-display);
+    font-size: 5rem;
+    color: rgba(201,168,76,0.08);
+    z-index: 1;
+    transition: opacity 0.4s, transform 0.4s;
+  }
+  .artist-card:hover .artist-monogram { opacity: 0; transform: translate(-50%, -50%) translateY(-40px); }
+  .artist-overlay {
+    position: absolute; inset: 0; z-index: 2;
+    background: linear-gradient(180deg, transparent 30%, rgba(8,8,8,0.85) 100%);
+    transition: background 0.4s;
+  }
+  .artist-card:hover .artist-overlay { background: linear-gradient(180deg, transparent 0%, rgba(8,8,8,0.92) 100%); }
+  .artist-info {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    padding: 2rem 1.5rem;
+    z-index: 3;
+    transform: translateY(20px);
+    transition: transform 0.4s ease;
+  }
+  .artist-card:hover .artist-info { transform: translateY(0); }
+  .artist-tag {
+    font-size: 0.58rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 0.5rem;
+  }
+  .artist-name {
+    font-family: var(--ff-display);
+    font-size: 2.2rem;
+    letter-spacing: 0.04em;
+    color: var(--white);
+    line-height: 1;
+    margin-bottom: 0.8rem;
+  }
+  .artist-bio {
+    font-size: 0.8rem;
+    line-height: 1.6;
+    color: rgba(245,242,236,0.5);
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.5s ease, opacity 0.4s;
+    opacity: 0;
+  }
+  .artist-card:hover .artist-bio { max-height: 80px; opacity: 1; }
+  .artist-border {
+    position: absolute; inset: 0; z-index: 4;
+    border: 1px solid rgba(201,168,76,0);
+    transition: border-color 0.4s;
+    pointer-events: none;
+  }
+  .artist-card:hover .artist-border { border-color: rgba(201,168,76,0.25); }
+
+  /* MUSIC */
+  #music {
+    padding: 8rem 4rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .music-header {
+    display: flex; justify-content: space-between; align-items: flex-end;
+    margin-bottom: 4rem;
+  }
+  .music-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    grid-template-rows: auto auto;
+    gap: 1px;
+    background: var(--border);
+  }
+  .album-card {
+    background: var(--charcoal);
+    padding: 2rem;
+    position: relative;
+    overflow: hidden;
+    cursor: none;
+    transition: background 0.3s;
+  }
+  .album-card:hover { background: var(--mid); }
+  .album-card.featured { grid-row: span 2; display: flex; flex-direction: column; justify-content: flex-end; min-height: 480px; }
+  .album-art {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
+  }
+  .album-art-inner {
+    width: 100%; height: 100%;
+    transition: transform 0.6s ease;
+  }
+  .album-card:hover .album-art-inner { transform: scale(1.04); }
+  .album-art-maverick {
+    background: linear-gradient(135deg, #1a0f00 0%, #0d0700 40%, #080808 100%);
+  }
+  .album-art-barnabas {
+    background: linear-gradient(135deg, #001a0d 0%, #00070a 40%, #080808 100%);
+  }
+  .album-art-kol {
+    background: linear-gradient(135deg, #0a0014 0%, #04000d 40%, #080808 100%);
+  }
+  .album-art-nbs {
+    background: linear-gradient(135deg, #14000a 0%, #0d0008 40%, #080808 100%);
+  }
+  .album-art-era {
+    background: linear-gradient(135deg, #001014 0%, #000810 40%, #080808 100%);
+  }
+  .album-art-tza {
+    background: linear-gradient(135deg, #141400 0%, #0d0d00 40%, #080808 100%);
+  }
+  .album-glyph {
+    font-family: var(--ff-display);
+    font-size: 8rem;
+    color: rgba(201,168,76,0.06);
+    line-height: 1;
+    text-align: center;
+    padding: 2rem;
+  }
+  .album-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(180deg, transparent 20%, rgba(8,8,8,0.96) 100%);
+  }
+  .album-info { position: relative; z-index: 2; }
+  .album-year {
+    font-size: 0.6rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 0.5rem;
+  }
+  .album-title {
+    font-family: var(--ff-display);
+    font-size: 1.8rem;
+    letter-spacing: 0.04em;
+    color: var(--white);
+    line-height: 1.1;
+    margin-bottom: 0.4rem;
+  }
+  .album-card.featured .album-title { font-size: 3rem; }
+  .album-artist {
+    font-family: var(--ff-serif);
+    font-size: 0.85rem;
+    font-style: italic;
+    color: var(--text-muted);
+    margin-bottom: 1rem;
+  }
+  .album-tracks {
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    color: var(--text-muted);
+    text-transform: uppercase;
+  }
+  .album-play {
+    display: inline-flex; align-items: center; gap: 0.6rem;
+    margin-top: 1.2rem;
+    font-size: 0.68rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    text-decoration: none;
+    border-bottom: 1px solid var(--gold-dim);
+    padding-bottom: 2px;
+    transition: color 0.3s, border-color 0.3s;
+  }
+  .album-play:hover { color: var(--gold-light); border-color: var(--gold-light); }
+
+  /* NEWS */
+  #news {
+    padding: 8rem 4rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .news-header {
+    display: flex; justify-content: space-between; align-items: flex-end;
+    margin-bottom: 4rem;
+  }
+  .news-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+  }
+  .news-card {
+    border-top: 1px solid var(--border);
+    padding-top: 1.5rem;
+    cursor: none;
+    transition: border-color 0.3s;
+  }
+  .news-card:hover { border-color: var(--gold); }
+  .news-cat {
+    font-size: 0.6rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 0.8rem;
+  }
+  .news-title {
+    font-family: var(--ff-serif);
+    font-size: 1.2rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: var(--white);
+    margin-bottom: 1rem;
+    transition: color 0.3s;
+  }
+  .news-card:hover .news-title { color: var(--gold-light); }
+  .news-excerpt {
+    font-size: 0.82rem;
+    line-height: 1.7;
+    color: var(--text-muted);
+    margin-bottom: 1.2rem;
+  }
+  .news-meta {
+    font-size: 0.62rem;
+    letter-spacing: 0.15em;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    display: flex; align-items: center; gap: 0.8rem;
+  }
+  .news-meta::before { content: ''; display: block; width: 12px; height: 1px; background: var(--gold-dim); }
+  .news-img {
+    aspect-ratio: 16/9;
+    margin-bottom: 1.5rem;
+    overflow: hidden;
+    background: var(--mid);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .news-img-inner {
+    width: 100%; height: 100%;
+    transition: transform 0.5s ease;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .news-card:hover .news-img-inner { transform: scale(1.05); }
+  .news-placeholder {
+    font-family: var(--ff-display);
+    font-size: 3rem;
+    color: rgba(201,168,76,0.1);
+  }
+
+  /* CONTACT */
+  #contact {
+    padding: 8rem 4rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6rem;
+    align-items: start;
+  }
+  .contact-left {}
+  .contact-intro {
+    font-family: var(--ff-serif);
+    font-size: 1.05rem;
+    font-style: italic;
+    color: rgba(245,242,236,0.6);
+    line-height: 1.9;
+    margin-bottom: 3rem;
+  }
+  .contact-details { display: flex; flex-direction: column; gap: 1.5rem; }
+  .contact-item { display: flex; gap: 1.5rem; align-items: flex-start; }
+  .contact-icon {
+    width: 40px; height: 40px;
+    border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .contact-icon svg { width: 16px; height: 16px; stroke: var(--gold); fill: none; stroke-width: 1.5; }
+  .contact-label {
+    font-size: 0.6rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 0.3rem;
+  }
+  .contact-value {
+    font-family: var(--ff-serif);
+    font-size: 1rem;
+    color: var(--white);
+  }
+
+  .contact-right {}
+  .form-group {
+    margin-bottom: 1.5rem;
+    position: relative;
+  }
+  .form-label {
+    display: block;
+    font-size: 0.62rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 0.6rem;
+  }
+  .form-input, .form-textarea, .form-select {
+    width: 100%;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid var(--border);
+    padding: 0.8rem 0;
+    font-family: var(--ff-body);
+    font-size: 0.9rem;
+    font-weight: 300;
+    color: var(--white);
+    transition: border-color 0.3s;
+    outline: none;
+    appearance: none;
+  }
+  .form-input:focus, .form-textarea:focus, .form-select:focus {
+    border-color: var(--gold);
+  }
+  .form-input::placeholder, .form-textarea::placeholder {
+    color: var(--text-muted);
+    font-style: italic;
+  }
+  .form-textarea { resize: none; height: 100px; }
+  .form-select { cursor: none; }
+  .form-select option { background: var(--charcoal); }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+  .form-submit {
+    display: inline-flex; align-items: center; gap: 1rem;
+    margin-top: 1rem;
+    font-family: var(--ff-body);
+    font-size: 0.72rem;
+    font-weight: 400;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--black);
+    background: var(--gold);
+    border: none;
+    padding: 1rem 2.2rem;
+    cursor: none;
+    transition: background 0.3s, transform 0.2s;
+  }
+  .form-submit:hover { background: var(--gold-light); transform: translateY(-1px); }
+  .form-submit svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2; transition: transform 0.3s; }
+  .form-submit:hover svg { transform: translateX(4px); }
+
+  /* FOOTER */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 3rem 4rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 2rem;
+    align-items: center;
+  }
+  .footer-logo {
+    font-family: var(--ff-display);
+    font-size: 1.3rem;
+    letter-spacing: 0.15em;
+    color: var(--white);
+  }
+  .footer-logo span { color: var(--gold); }
+  .footer-copy {
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+    text-align: center;
+  }
+  .footer-socials {
+    display: flex; gap: 1.2rem; justify-content: flex-end;
+  }
+  .footer-socials a {
+    font-size: 0.62rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+  .footer-socials a:hover { color: var(--gold); }
+
+  /* REVEAL ANIMATIONS */
+  .reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .reveal-delay-1 { transition-delay: 0.1s; }
+  .reveal-delay-2 { transition-delay: 0.2s; }
+  .reveal-delay-3 { transition-delay: 0.3s; }
+  .reveal-delay-4 { transition-delay: 0.4s; }
+
+  /* LINK RESET */
+  a { cursor: none; }
+
+  /* MOBILE NOTE */
+  @media (max-width: 900px) {
+    nav { padding: 1.2rem 1.5rem; }
+    .nav-links, .nav-cta { display: none; }
+    #hero { grid-template-columns: 1fr; }
+    .hero-right { display: none; }
+    .hero-left { padding: 7rem 1.5rem 5rem; }
+    #about { grid-template-columns: 1fr; gap: 3rem; padding: 5rem 1.5rem; }
+    #artists { padding: 5rem 1.5rem; }
+    .artists-grid { grid-template-columns: 1fr 1fr; }
+    #music { padding: 5rem 1.5rem; }
+    .music-grid { grid-template-columns: 1fr; }
+    .album-card.featured { min-height: 320px; }
+    #news { padding: 5rem 1.5rem; }
+    .news-grid { grid-template-columns: 1fr; }
+    #contact { grid-template-columns: 1fr; gap: 3rem; padding: 5rem 1.5rem; }
+    footer { grid-template-columns: 1fr; text-align: center; padding: 2rem 1.5rem; }
+    .footer-socials { justify-content: center; }
+    .form-row { grid-template-columns: 1fr; }
+    .artists-header, .music-header, .news-header { flex-direction: column; align-items: flex-start; gap: 1rem; }
+    body { cursor: default; }
+    .cursor, .cursor-ring { display: none; }
+    a { cursor: pointer; }
+    button { cursor: pointer; }
+  }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursor-ring"></div>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="#" class="nav-logo">Flyboy <span>I.N.C</span></a>
+  <ul class="nav-links">
+    <li><a href="#about">Label</a></li>
+    <li><a href="#artists">Artists</a></li>
+    <li><a href="#music">Music</a></li>
+    <li><a href="#news">News</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="#contact" class="nav-cta">Work With Us</a>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-left">
+    <div class="hero-eyebrow">Lagos, Nigeria · Est. 2017</div>
+    <h1 class="hero-title">
+      FLY<br>BOY
+      <em>I.N.C</em>
+    </h1>
+    <p class="hero-sub">Africa's boldest independent record label. Building icons. Exporting culture.</p>
+    <div class="hero-actions">
+      <a href="#artists" class="btn-primary">Our Artists</a>
+      <a href="#music" class="btn-ghost">
+        Explore Music
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="hero-img-wrap">
+      <div class="hero-fbi-text">FBI</div>
+      <div class="hero-ornament"></div>
+    </div>
+  </div>
+  <div class="hero-divider"></div>
+  <div class="hero-scroll">
+    <div class="scroll-line"></div>
+    Scroll
+  </div>
+  <div class="hero-counter">
+    <div class="num">07</div>
+    <div class="label">Years Strong</div>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker">
+  <div class="ticker-track" id="ticker-track">
+    <div class="ticker-item">Kizz Daniel <span class="ticker-dot"></span></div>
+    <div class="ticker-item">Demmie Vee <span class="ticker-dot"></span></div>
+    <div class="ticker-item">Philkeyz <span class="ticker-dot"></span></div>
+    <div class="ticker-item">Pryme <span class="ticker-dot"></span></div>
+    <div class="ticker-item">Maverick <span class="ticker-dot"></span></div>
+    <div class="ticker-item">Buga <span class="ticker-dot"></span></div>
+    <div class="ticker-item">Cough (Odo) <span class="ticker-dot"></span></div>
+    <div class="ticker-item">Twe Twe <span class="ticker-dot"></span></div>
+    <div class="ticker-item">Flyboy I.N.C <span class="ticker-dot"></span></div>
+    <div class="ticker-item">Kizz Daniel <span class="ticker-dot"></span></div>
+    <div class="ticker-item">Demmie Vee <span class="ticker-dot"></span></div>
+    <div class="ticker-item">Philkeyz <span class="ticker-dot"></span></div>
+    <div class="ticker-item">Pryme <span class="ticker-dot"></span></div>
+    <div class="ticker-item">Maverick <span class="ticker-dot"></span></div>
+    <div class="ticker-item">Buga <span class="ticker-dot"></span></div>
+    <div class="ticker-item">Cough (Odo) <span class="ticker-dot"></span></div>
+    <div class="ticker-item">Twe Twe <span class="ticker-dot"></span></div>
+    <div class="ticker-item">Flyboy I.N.C <span class="ticker-dot"></span></div>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="about-left reveal">
+    <div class="about-img-frame">
+      <div class="about-img-inner">
+        <div class="about-monogram">FBI</div>
+      </div>
+    </div>
+    <div class="about-frame-deco"></div>
+    <div class="about-frame-deco2"></div>
+    <div class="about-year-badge">
+      <div class="yr">2017</div>
+      <div class="yr-label">Founded</div>
+    </div>
+  </div>
+  <div class="about-right">
+    <div class="section-label reveal">About the Label</div>
+    <h2 class="section-title reveal reveal-delay-1">Born Free.<br>Built to Last.</h2>
+    <p class="about-text reveal reveal-delay-2">
+      <strong>Flyboy I.N.C</strong> was born in November 2017 from an act of artistic courage. When 
+      <strong>Kizz Daniel</strong> — one of Nigeria's most gifted voices — walked away from G-Worldwide Entertainment, 
+      he didn't just leave a label. He built his own.
+    </p>
+    <p class="about-text reveal reveal-delay-3">
+      Operating from Lagos, Flyboy I.N.C is an independent record label, management company, and creative 
+      force committed to developing world-class African talent. From Afropop to Afrobeats, the label 
+      has helped define the sound of a generation — reaching hundreds of millions of listeners across every continent.
+    </p>
+    <div class="about-stats reveal reveal-delay-4">
+      <div class="stat-item">
+        <div class="stat-num">4+</div>
+        <div class="stat-label">Artists</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">6</div>
+        <div class="stat-label">Albums</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">1B+</div>
+        <div class="stat-label">Streams</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ARTISTS -->
+<section id="artists">
+  <div class="artists-header">
+    <div>
+      <div class="section-label reveal">Our Roster</div>
+      <h2 class="section-title reveal reveal-delay-1">The Artists</h2>
+    </div>
+    <a href="#contact" class="btn-ghost reveal reveal-delay-2">
+      Join the Roster
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+    </a>
+  </div>
+  <div class="artists-grid">
+    <div class="artist-card reveal">
+      <div class="artist-bg artist-bg-kizz"></div>
+      <div class="artist-pattern"></div>
+      <div class="artist-monogram">KD</div>
+      <div class="artist-overlay"></div>
+      <div class="artist-border"></div>
+      <div class="artist-info">
+        <div class="artist-tag">Founder · CEO · Frontline Act</div>
+        <div class="artist-name">Kizz Daniel</div>
+        <p class="artist-bio">Nigeria's global Afropop icon. Known for "Woju," "Buga," "Cough (Odo)," and Twe Twe. Performed at the FIFA World Cup 2022 in Qatar.</p>
+      </div>
+    </div>
+    <div class="artist-card reveal reveal-delay-1">
+      <div class="artist-bg artist-bg-demmie"></div>
+      <div class="artist-pattern"></div>
+      <div class="artist-monogram">DV</div>
+      <div class="artist-overlay"></div>
+      <div class="artist-border"></div>
+      <div class="artist-info">
+        <div class="artist-tag">Singer · Songwriter</div>
+        <div class="artist-name">Demmie Vee</div>
+        <p class="artist-bio">Soulful Afropop vocalist and one of Flyboy I.N.C's founding signees. Known for rich harmonies and emotive storytelling.</p>
+      </div>
+    </div>
+    <div class="artist-card reveal reveal-delay-2">
+      <div class="artist-bg artist-bg-pryme"></div>
+      <div class="artist-pattern"></div>
+      <div class="artist-monogram">PM</div>
+      <div class="artist-overlay"></div>
+      <div class="artist-border"></div>
+      <div class="artist-info">
+        <div class="artist-tag">Artist · Flyboy × G-Worldwide</div>
+        <div class="artist-name">Pryme</div>
+        <p class="artist-bio">Rising star signed jointly to Flyboy I.N.C and G-Worldwide. Featured on Kizz Daniel's Maverick album — the world is his to conquer.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MUSIC / DISCOGRAPHY -->
+<section id="music">
+  <div class="music-header">
+    <div>
+      <div class="section-label reveal">Discography</div>
+      <h2 class="section-title reveal reveal-delay-1">The Music</h2>
+    </div>
+    <a href="https://open.spotify.com" class="btn-ghost reveal reveal-delay-2">
+      Stream Everywhere
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+    </a>
+  </div>
+  <div class="music-grid reveal">
+    <!-- Featured -->
+    <div class="album-card featured">
+      <div class="album-art album-art-maverick">
+        <div class="album-art-inner">
+          <div class="album-glyph">MAVERICK</div>
+        </div>
+      </div>
+      <div class="album-overlay"></div>
+      <div class="album-info">
+        <div class="album-year">2023 · Latest Release</div>
+        <div class="album-title">Maverick</div>
+        <div class="album-artist">Kizz Daniel</div>
+        <div class="album-tracks">20 tracks · Flyboy I.N.C × Empire Distribution</div>
+        <a href="#" class="album-play">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          Stream Now
+        </a>
+      </div>
+    </div>
+    <!-- Grid -->
+    <div class="album-card">
+      <div class="album-art album-art-tza">
+        <div class="album-art-inner">
+          <div class="album-glyph" style="font-size:5rem">TZA</div>
+        </div>
+      </div>
+      <div class="album-overlay"></div>
+      <div class="album-info">
+        <div class="album-year">2024 · EP</div>
+        <div class="album-title">TZA</div>
+        <div class="album-artist">Kizz Daniel</div>
+        <div class="album-tracks">Twe Twe · Too Busy to Be Bae</div>
+      </div>
+    </div>
+    <div class="album-card">
+      <div class="album-art album-art-barnabas">
+        <div class="album-art-inner">
+          <div class="album-glyph" style="font-size:4rem">BARNABAS</div>
+        </div>
+      </div>
+      <div class="album-overlay"></div>
+      <div class="album-info">
+        <div class="album-year">2021 · EP</div>
+        <div class="album-title">Barnabas</div>
+        <div class="album-artist">Kizz Daniel</div>
+        <div class="album-tracks">7 tracks · Includes Lie</div>
+      </div>
+    </div>
+    <div class="album-card">
+      <div class="album-art album-art-kol">
+        <div class="album-art-inner">
+          <div class="album-glyph" style="font-size:3.5rem">KING OF LOVE</div>
+        </div>
+      </div>
+      <div class="album-overlay"></div>
+      <div class="album-info">
+        <div class="album-year">2020</div>
+        <div class="album-title">King of Love</div>
+        <div class="album-artist">Kizz Daniel</div>
+        <div class="album-tracks">17 tracks</div>
+      </div>
+    </div>
+    <div class="album-card">
+      <div class="album-art album-art-nbs">
+        <div class="album-art-inner">
+          <div class="album-glyph" style="font-size:3rem">NO BAD SONGZ</div>
+        </div>
+      </div>
+      <div class="album-overlay"></div>
+      <div class="album-info">
+        <div class="album-year">2018 · #1 Billboard World Albums</div>
+        <div class="album-title">No Bad Songz</div>
+        <div class="album-artist">Kizz Daniel</div>
+        <div class="album-tracks">20 tracks · One Ticket · Jombo</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- NEWS -->
+<section id="news">
+  <div class="news-header">
+    <div>
+      <div class="section-label reveal">Latest</div>
+      <h2 class="section-title reveal reveal-delay-1">News & Press</h2>
+    </div>
+    <a href="#" class="btn-ghost reveal reveal-delay-2">
+      All Stories
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+    </a>
+  </div>
+  <div class="news-grid">
+    <div class="news-card reveal">
+      <div class="news-img">
+        <div class="news-img-inner">
+          <div class="news-placeholder">FBI</div>
+        </div>
+      </div>
+      <div class="news-cat">Label News</div>
+      <h3 class="news-title">Emperor Geezy Named CEO of Flyboy I.N.C as Kizz Daniel Steps Into Creative Director Role</h3>
+      <p class="news-excerpt">In a bold structural move, Kizz Daniel restructures Flyboy I.N.C — bringing in Emperor Geezy to lead the business while Kizz focuses on artistry and A&R.</p>
+      <div class="news-meta">June 2023</div>
+    </div>
+    <div class="news-card reveal reveal-delay-1">
+      <div class="news-img">
+        <div class="news-img-inner">
+          <div class="news-placeholder">TZA</div>
+        </div>
+      </div>
+      <div class="news-cat">Release</div>
+      <h3 class="news-title">Kizz Daniel Drops TZA EP — Celebrating 10 Years in the Nigerian Music Industry</h3>
+      <p class="news-excerpt">Released through Flyboy I.N.C and Empire Distribution, TZA marks a decade of chart-topping Afropop including the viral smash "Twe Twe."</p>
+      <div class="news-meta">March 2024</div>
+    </div>
+    <div class="news-card reveal reveal-delay-2">
+      <div class="news-img">
+        <div class="news-img-inner">
+          <div class="news-placeholder">FIFA</div>
+        </div>
+      </div>
+      <div class="news-cat">Global Stage</div>
+      <h3 class="news-title">Kizz Daniel Performs "Buga" Before 50,000 Fans at the FIFA World Cup Fan Festival in Qatar</h3>
+      <p class="news-excerpt">A landmark moment for African music on the global stage — Flyboy I.N.C's flagship artist headlined the FIFA Fan Festival in Doha, November 2022.</p>
+      <div class="news-meta">November 2022</div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="contact-left">
+    <div class="section-label reveal">Get In Touch</div>
+    <h2 class="section-title reveal reveal-delay-1">Let's Build<br>Something.</h2>
+    <p class="contact-intro reveal reveal-delay-2">Whether you're a brand seeking partnership, an artist looking for a home, or press reaching out — we're open. Africa has stories to tell. Let's tell them together.</p>
+    <div class="contact-details reveal reveal-delay-3">
+      <div class="contact-item">
+        <div class="contact-icon">
+          <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        </div>
+        <div>
+          <div class="contact-label">Location</div>
+          <div class="contact-value">Lagos, Nigeria</div>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-icon">
+          <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        </div>
+        <div>
+          <div class="contact-label">General</div>
+          <div class="contact-value">info@flyboyinc.net</div>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-icon">
+          <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+        </div>
+        <div>
+          <div class="contact-label">Bookings</div>
+          <div class="contact-value">bookings@flyboyinc.net</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="contact-right reveal reveal-delay-2">
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">First Name</label>
+        <input type="text" class="form-input" placeholder="Tobiloba">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Last Name</label>
+        <input type="text" class="form-input" placeholder="Anidugbe">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Email Address</label>
+      <input type="email" class="form-input" placeholder="you@example.com">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Enquiry Type</label>
+      <select class="form-select">
+        <option value="">Select enquiry type</option>
+        <option>Artist Booking</option>
+        <option>Brand Partnership</option>
+        <option>Artist Submission</option>
+        <option>Press & Media</option>
+        <option>General Enquiry</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Message</label>
+      <textarea class="form-textarea" placeholder="Tell us what you have in mind..."></textarea>
+    </div>
+    <button class="form-submit">
+      Send Message
+      <svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+    </button>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Flyboy <span>I.N.C</span></div>
+  <div class="footer-copy">© 2025 Flyboy I.N.C. All rights reserved. Lagos, Nigeria.</div>
+  <div class="footer-socials">
+    <a href="#">Instagram</a>
+    <a href="#">Twitter</a>
+    <a href="#">YouTube</a>
+    <a href="#">Spotify</a>
+  </div>
+</footer>
+
+<script>
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursor-ring');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+  document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+  function animateCursor() {
+    cursor.style.left = mx + 'px';
+    cursor.style.top = my + 'px';
+    rx += (mx - rx) * 0.12;
+    ry += (my - ry) * 0.12;
+    ring.style.left = rx + 'px';
+    ring.style.top = ry + 'px';
+    requestAnimationFrame(animateCursor);
+  }
+  animateCursor();
+
+  document.querySelectorAll('a, button, .artist-card, .album-card, .news-card').forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      cursor.style.transform = 'translate(-50%, -50%) scale(2)';
+      ring.style.width = '48px';
+      ring.style.height = '48px';
+    });
+    el.addEventListener('mouseleave', () => {
+      cursor.style.transform = 'translate(-50%, -50%) scale(1)';
+      ring.style.width = '32px';
+      ring.style.height = '32px';
+    });
+  });
+
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 60);
+  });
+
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
+  }, { threshold: 0.12 });
+  reveals.forEach(el => observer.observe(el));
+
+  document.querySelector('.form-submit').addEventListener('click', function() {
+    const orig = this.innerHTML;
+    this.innerHTML = 'Sent ✓';
+    this.style.background = 'var(--gold-dim)';
+    setTimeout(() => {
+      this.innerHTML = orig;
+      this.style.background = '';
+    }, 2500);
+  });
+</script>
+</body>
+</html>
